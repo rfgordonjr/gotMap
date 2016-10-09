@@ -1,0 +1,23 @@
+---
+title: "Game of Thrones Maps"
+author: "Rob Gordon"
+date: "10/9/2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+We'll try to follow the instructions at  <http://www.r-chart.com/2016/10/map-of-middle-earth-map-above-was.html> using the shapefiles from <https://www.cartographersguild.com/showthread.php?t=30472>.
+
+We'll be using the following packages:
+
+```{r}
+library(ggplot2)
+library(ggmap)
+library(maptools)
+```
+
