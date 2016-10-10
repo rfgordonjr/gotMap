@@ -86,3 +86,28 @@ ggplot() +
  ylab('') + 
  xlab('')
 ```
+
+## Leaflet Map
+
+```{r}
+leaflet() %>% 
+  addPolygons(data=continents, stroke=FALSE, fillOpacity = 0.5, smoothFactor=0.5,
+              color="gray") %>% 
+  addPolygons(data=islands, stroke=FALSE, fillOpacity = 0.5, smoothFactor=0.5,
+              color="gray") %>%
+  addPolygons(data=lakes, stroke=FALSE, fillOpacity = 0.5, smoothFactor=0.5,
+              color="blue", fillColor = "blue") %>% 
+  addPolylines(data=rivers, stroke=TRUE, fillOpacity = 0.5, smoothFactor=0.5,
+               color="blue", weight=1) %>% 
+  addPolylines(data=roads, stroke=TRUE, fillOpacity = 0.5, smoothFactor=0.5,
+               color="brown", weight=1) %>% 
+  addCircles(data=locationsData, lng=~coords.x1, lat=~coords.x2, radius=~0.1*sizeData,
+             popup=~name, color="red", fillColor = "red") %>% 
+  addPolylines(data=wall, stroke=TRUE, weight=2, color="black")
+```
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
