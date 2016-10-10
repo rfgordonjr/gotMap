@@ -19,5 +19,70 @@ We'll be using the following packages:
 library(ggplot2)
 library(ggmap)
 library(maptools)
+library(tidyr)
+library(dplyr)
+library(leaflet)
 ```
 
+## Read Data
+
+Use maptools to read the shapefiles.
+
+```{r}
+continents <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/continents.shp")
+islands <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/islands.shp")
+lakes <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/lakes.shp")
+landscape <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/landscape.shp")
+locations <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/locations.shp")
+officialMapAreas <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/officialMapAreas.shp")
+political <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/political.shp")
+regions <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/regions.shp")
+rivers <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/rivers.shp")
+roads <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/roads.shp")
+wall <- readShapeSpatial("/Users/robertgordon/Documents/gotMap/GoTRelease/wall.shp")
+```
+
+ggplot can't handle SpatialPointsDataFrames so we'll be clever with it:
+
+```{r}
+locationsData <- bind_cols(as.data.frame(locations@data), as.data.frame(locations@coords)) %>% 
+  rename(sizeData=size)
+```
+
+## Map with ggplot
+
+```{r}
+ggplot() +
+ geom_polygon(data = fortify(continents), 
+              aes(x = long, y = lat, group = group),
+              color = '#f0f0f0', fill='#f0f0f0', size = .2) +
+ geom_polygon(data = fortify(islands), 
+              aes(x = long, y = lat, group = group),
+              color = '#f0f0f0', fill='#f0f0f0', size = .2) +  
+ geom_path(data = fortify(continents),
+           aes(x = long, y = lat, group = group),
+           color = 'blue', size = .2) +
+ geom_polygon(data = fortify(landscape),
+          aes(x = long, y = lat, group = group),
+          color = 'gray', fill='gray', size = .2) +
+ geom_point(data = locationsData,
+          aes(x = coords.x1, y = coords.x2, shape=factor(type)),
+          color = 'red', fill='red') +
+ geom_text(data=locationsData, 
+           aes(x = coords.x1, y=coords.x2, label=name), size=1) +
+ geom_polygon(data = fortify(lakes),
+            aes(x = long, y = lat, group = group),
+            color = '#a6bddb', fill='#a6bddb', size = .2) +
+ geom_path(data = fortify(rivers), 
+            aes(x = long, y = lat, group = group),
+            color = '#a6bddb', size = .2) + 
+ geom_path(data = fortify(roads), 
+            aes(x = long, y = lat, group = group),
+            color = 'brown', size = .2) +   
+ geom_path(data = fortify(wall), 
+            aes(x = long, y = lat, group = group),
+            color = 'black', size = .2) +   
+ ggtitle('Westeros and Essos') + 
+ ylab('') + 
+ xlab('')
+```
