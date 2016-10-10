@@ -15,7 +15,7 @@ We'll try to follow the instructions at  <http://www.r-chart.com/2016/10/map-of-
 
 We'll be using the following packages:
 
-```{r}
+```{r, warning=FALSE, message=FALSE}
 library(ggplot2)
 library(ggmap)
 library(maptools)
